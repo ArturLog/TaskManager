@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <DataTemplate x:Key="ButtonsTemplate">
+        <Grid Margin="700,0,0,279">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Slider Minimum ="1" Maximum="5" Value="{Binding Path=RefreshDelay}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="65"/>
+            <Button Grid.Row="1" Content="Start" Command="{Binding StartRefreshCommand}"/>
+            <Button Grid.Row="2" Content="Stop" Command="{Binding StopRefreshCommand}"/>
+            <Button Grid.Row="3" Content="Refresh" Command="{Binding RefreshCommand}"/>
+        </Grid>
+    </DataTemplate>
+</ResourceDictionary>
