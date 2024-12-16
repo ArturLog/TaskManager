@@ -105,8 +105,8 @@ namespace Task_manager.ViewsModels.Classes
                 OnPropertyChanged(nameof(NewTaskCommand));
             }
         }
-        private DateTime _newTaskDate;
-        public DateTime NewTaskDate
+        private DateTime? _newTaskDate;
+        public DateTime? NewTaskDate
         {
             get => _newTaskDate;
             set
@@ -278,14 +278,10 @@ namespace Task_manager.ViewsModels.Classes
                         };
                         taskDefinition.Triggers.Add(oneTimeTrigger);
                     }
-
-                    // Set the action
                     taskDefinition.Actions.Add(new ExecAction(NewTaskCommand, null, null));
 
-                    // Register the task
                     taskService.RootFolder.RegisterTaskDefinition(NewTaskName, taskDefinition);
 
-                    // Refresh the task list
                     RefreshTasksAsync();
                 }
                 ClearNewFields();
