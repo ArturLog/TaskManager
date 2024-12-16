@@ -8,8 +8,8 @@
              d:DesignHeight="656" d:DesignWidth="794">
     <Grid>
         <ContentControl Content="{Binding}" ContentTemplate="{StaticResource FilterTemplate}"/>
-        <Grid Margin="0,25,0,0">
-            <DataGrid IsReadOnly="True" ItemsSource="{Binding FilteredTasks}" SelectedItem="{Binding SelectedTask}" AutoGenerateColumns="False" Margin="0,0,94,279">
+        <Grid Margin="0,45,0,0">
+            <DataGrid IsReadOnly="True" ItemsSource="{Binding FilteredTasks}" SelectedItem="{Binding SelectedTask}" AutoGenerateColumns="False" Margin="0,0,120,279">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="Name" Binding="{Binding TaskName}" Width="160" />
                     <DataGridTextColumn Header="Execution Time" Binding="{Binding ExecutionTime}" Width="160" />
@@ -33,8 +33,8 @@
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5,0,5,5">
-                    <GroupBox Header="Command" Margin="10" Height="246">
-                        <TextBlock Text="{Binding SelectedTask.Command}" />
+                    <GroupBox Header="Command" Margin="10" Height="215">
+                        <TextBlock TextWrapping="Wrap" Text="{Binding SelectedTask.Command}" />
                     </GroupBox>
                 </StackPanel>
 

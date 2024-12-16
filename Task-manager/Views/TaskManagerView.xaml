@@ -8,8 +8,8 @@
              d:DesignHeight="656" d:DesignWidth="794">
     <Grid>
         <ContentControl Content="{Binding}" ContentTemplate="{StaticResource FilterTemplate}"/>
-        <Grid Margin="0,25,0,0">
-            <DataGrid IsReadOnly="True" ItemsSource="{Binding FilteredProcesses}" SelectedItem="{Binding SelectedProcess}" AutoGenerateColumns="False" Margin="0,0,94,279">
+        <Grid Margin="0,45,0,0">
+            <DataGrid IsReadOnly="True" ItemsSource="{Binding FilteredProcesses}" SelectedItem="{Binding SelectedProcess}" AutoGenerateColumns="False" Margin="0,0,120,279">
                 <DataGrid.Columns>
                     <DataGridTextColumn Header="PID" Binding="{Binding ProcessId}" Width="160"/>
                     <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="160"/>
