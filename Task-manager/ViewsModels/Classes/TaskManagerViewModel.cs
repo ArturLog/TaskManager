@@ -155,7 +155,6 @@ namespace Task_manager.ViewsModels.Classes
             _startRefreshCommand = new RelayCommand(() =>
             {
                 _isRefreshing = true;
-                RefreshProcesses();
                 StartRefreshTask();
             });
             _stopRefreshCommand = new RelayCommand(() =>
@@ -168,13 +167,13 @@ namespace Task_manager.ViewsModels.Classes
         }
         private void StartRefreshTask()
         {
-            Task.Delay(RefreshDelay);
+            _isRefreshing = true;
             Task.Run(async () =>
             {
                 while (_isRefreshing)
                 {
                     await RefreshProcessesAsync();
-                    await Task.Delay(RefreshDelay);
+                    await Task.Delay(RefreshDelay * 2000);
                 }
             });
         }
@@ -204,10 +203,6 @@ namespace Task_manager.ViewsModels.Classes
                 FilteredProcesses.Add(process);
             }
         }
-        public async void RefreshProcesses()
-        {
-            await RefreshProcessesAsync();
-        }
         private async Task RefreshProcessesAsync()
         {
             var processList = Process.GetProcesses();
@@ -231,9 +226,9 @@ namespace Task_manager.ViewsModels.Classes
                     {
                         _processes.Add(process);
                     }
+                    CopyCollections();
                 });
             });
-            CopyCollections();
         }
         public void KillProcess()
         {

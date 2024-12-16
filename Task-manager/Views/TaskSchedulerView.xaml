@@ -25,17 +25,34 @@
                     </ContextMenu>
                 </DataGrid.ContextMenu>
             </DataGrid>
-            <Grid Margin="700,0,0,279">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <Slider Minimum ="1" Maximum="5" Value="{Binding Path=RefreshDelay}" HorizontalAlignment="Center" VerticalAlignment="Center" Width="65"/>
-                <Button Grid.Row="1" Content="Start" Command="{Binding StartRefreshCommand}"/>
-                <Button Grid.Row="2" Content="Stop" Command="{Binding StopRefreshCommand}"/>
-                <Button Grid.Row="3" Content="Refresh" Command="{Binding RefreshCommand}"/>
+            <ContentControl Content="{Binding}" ContentTemplate="{StaticResource ButtonsTemplate}"/>
+            <Grid Margin="0,357,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" Orientation="Vertical" Margin="5">
+                    <TextBlock Text="Task Name" />
+                    <TextBox Text="{Binding NewTaskName}" />
+                    <TextBlock Text="Command" Margin="0,10,0,0" />
+                    <TextBox Text="{Binding NewTaskCommand}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Vertical" Margin="5">
+                    <TextBlock Text="Execution Date" />
+                    <DatePicker SelectedDate="{Binding NewTaskDate}" />
+                    <TextBlock Text="Execution Hour" Margin="0,10,0,0" />
+                    <TextBox Text="{Binding NewTaskHour}" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="2" Orientation="Vertical" Margin="5">
+                    <CheckBox Content="Cyclic Task" IsChecked="{Binding NewTaskIsCyclic}" />
+                </StackPanel>
+
+                <Button Grid.Column="3" Content="Add Task" Command="{Binding AddTaskCommand}" VerticalAlignment="Center" Margin="10,0,0,0" />
             </Grid>
         </Grid>
     </Grid>

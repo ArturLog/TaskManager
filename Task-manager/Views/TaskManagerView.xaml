@@ -42,10 +42,6 @@
                         </MenuItem>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
-                <DataGrid.InputBindings>
-                    <MouseBinding MouseAction="LeftDoubleClick"
-                                  Command="{Binding OpenDetailsCommand}" />
-                </DataGrid.InputBindings>
             </DataGrid>
             <Grid Margin="5,352,5,5">
                 <Grid.ColumnDefinitions>
