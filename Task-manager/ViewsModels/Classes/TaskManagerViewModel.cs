@@ -149,6 +149,31 @@ namespace Task_manager.ViewsModels.Classes
             _isRefreshing = true;
             _refreshDelay = 1;
         }
+        private void KillProcess()
+        {
+            try
+            {
+                Process.GetProcessById(SelectedProcess.ProcessId).Kill();
+                _processes.Remove(SelectedProcess);
+                FilteredProcesses.Remove(SelectedProcess);
+            }
+            catch
+            {
+                // Handle errors
+            }
+        }
+        private void ChangePriority(string? priority)
+        {
+            try
+            {
+                var process = Process.GetProcessById(SelectedProcess.ProcessId);
+                process.PriorityClass = Enum.Parse<ProcessPriorityClass>(priority);
+            }
+            catch
+            {
+                // Handle errors
+            }
+        }
         private void AssignCommands()
         {
             _refreshCommand = new RelayCommand(async () => await RefreshProcessesAsync());
@@ -230,31 +255,6 @@ namespace Task_manager.ViewsModels.Classes
                 });
             });
         }
-        public void KillProcess()
-        {
-            try
-            {
-                Process.GetProcessById(SelectedProcess.ProcessId).Kill();
-                _processes.Remove(SelectedProcess);
-                FilteredProcesses.Remove(SelectedProcess);
-            }
-            catch
-            {
-                // Handle errors
-            }
-        }
-        public void ChangePriority(string? priority)
-        {
-            try
-            {
-                var process = Process.GetProcessById(SelectedProcess.ProcessId);
-                process.PriorityClass = Enum.Parse<ProcessPriorityClass>(priority);
-            }
-            catch
-            {
-                // Handle errors
-            }
-        }
         private List<string> GetModules(Process process)
         {
             try
@@ -266,6 +266,5 @@ namespace Task_manager.ViewsModels.Classes
                 return new List<string> { "Access Denied" };
             }
         }
-
     }
 }

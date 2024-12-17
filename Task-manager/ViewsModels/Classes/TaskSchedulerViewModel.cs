@@ -216,36 +216,7 @@ namespace Task_manager.ViewsModels.Classes
             _refreshDelay = 1;
             _newTaskHour = "HH:mm";
         }
-        private void AssignCommands()
-        {
-            _refreshCommand = new RelayCommand(async () => await RefreshTasksAsync());
-            _startRefreshCommand = new RelayCommand(() =>
-            {
-                _isRefreshing = true;
-                StartRefreshTask();
-            });
-            _stopRefreshCommand = new RelayCommand(() =>
-            {
-                _isRefreshing = false;
-            });
-            _addTaskCommand = new RelayCommand(AddTask);
-            _deleteTaskCommand = new RelayCommand(DeleteTask);
-            _filterCommand = new RelayCommand(FilterProcesses);
-            _executeTaskCommand = new RelayCommand(async () => await ExecuteTaskAsync());
-        }
-        private void ClearNewFields()
-        {
-            NewTaskName = string.Empty;
-            NewTaskCommand = string.Empty;
-            NewTaskHour = string.Empty;
-            NewTaskIsCyclic = false;
-
-            OnPropertyChanged(nameof(NewTaskName));
-            OnPropertyChanged(nameof(NewTaskCommand));
-            OnPropertyChanged(nameof(NewTaskHour));
-            OnPropertyChanged(nameof(NewTaskIsCyclic));
-        }
-        public void AddTask()
+        private void AddTask()
         {
             try
             {
@@ -291,14 +262,14 @@ namespace Task_manager.ViewsModels.Classes
                 // Handle exception
             }
         }
-        public void DeleteTask()
+        private void DeleteTask()
         {
             try
             {
                 using (var taskService = new TaskService())
                 {
-                   taskService.RootFolder.DeleteTask(SelectedTask.TaskName, false);
-                   FilteredTasks.Remove(SelectedTask);
+                    taskService.RootFolder.DeleteTask(SelectedTask.TaskName, false);
+                    FilteredTasks.Remove(SelectedTask);
                 }
             }
             catch (Exception ex)
@@ -306,7 +277,7 @@ namespace Task_manager.ViewsModels.Classes
                 Console.WriteLine($"Error deleting task: {ex.Message}");
             }
         }
-        public async Task ExecuteTaskAsync()
+        private async Task ExecuteTaskAsync()
         {
             try
             {
@@ -317,7 +288,8 @@ namespace Task_manager.ViewsModels.Classes
                         var task = taskService.FindTask(SelectedTask.TaskName);
                         if (task != null)
                         {
-                            task.Run(); 
+                            task.Run();
+                            SelectedTask.ExecutionCount += 1;
                         }
                         else
                         {
@@ -330,6 +302,35 @@ namespace Task_manager.ViewsModels.Classes
             {
                 Console.WriteLine($"Error executing task: {ex.Message}");
             }
+        }
+        private void AssignCommands()
+        {
+            _refreshCommand = new RelayCommand(async () => await RefreshTasksAsync());
+            _startRefreshCommand = new RelayCommand(() =>
+            {
+                _isRefreshing = true;
+                StartRefreshTask();
+            });
+            _stopRefreshCommand = new RelayCommand(() =>
+            {
+                _isRefreshing = false;
+            });
+            _addTaskCommand = new RelayCommand(AddTask);
+            _deleteTaskCommand = new RelayCommand(DeleteTask);
+            _filterCommand = new RelayCommand(FilterProcesses);
+            _executeTaskCommand = new RelayCommand(async () => await ExecuteTaskAsync());
+        }
+        private void ClearNewFields()
+        {
+            NewTaskName = string.Empty;
+            NewTaskCommand = string.Empty;
+            NewTaskHour = string.Empty;
+            NewTaskIsCyclic = false;
+
+            OnPropertyChanged(nameof(NewTaskName));
+            OnPropertyChanged(nameof(NewTaskCommand));
+            OnPropertyChanged(nameof(NewTaskHour));
+            OnPropertyChanged(nameof(NewTaskIsCyclic));
         }
         private void StartRefreshTask()
         {
@@ -362,7 +363,7 @@ namespace Task_manager.ViewsModels.Classes
                             TaskName = task.Name,
                             ExecutionTime = task.NextRunTime,
                             Command = task.Definition.Actions.OfType<ExecAction>().FirstOrDefault()?.Path ?? "N/A",
-                            ExecutionCount = task.NumberOfMissedRuns,
+                            ExecutionCount = 0,
                             TimeToNextExecution = nextRunTime
                         };
 
@@ -374,6 +375,14 @@ namespace Task_manager.ViewsModels.Classes
                         foreach (var taskModel in tasks)
                         {
                             _tasks.Add(taskModel);
+                        }
+
+                        foreach (var task in FilteredTasks)
+                        {
+                            if(task.ExecutionCount != 0)
+                            {
+                                _tasks.First(t => t.TaskName == task.TaskName).ExecutionCount = task.ExecutionCount;
+                            }
                         }
                         CopyCollections();
                     });
